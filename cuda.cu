@@ -45,7 +45,6 @@ __global__ void kMeansAssignAndPartialReduce(
     }
     __syncthreads();
 
-    // Pixel assignment logic
     if (gid < numPixels) {
         float b = (float)d_img[gid * 3];
         float g = (float)d_img[gid * 3 + 1];
@@ -190,32 +189,31 @@ int main(int argc, char** argv) {
 
     size_t smemSizeK1 = K * 3 * sizeof(float) + K * sizeof(int);
 
-    // Main Iteration Loop
     for (int iter = 0; iter < 50; ++iter) {
-        // Update Constant Memory directly from Device Memory (D2D copy)
+        // Update Constant Memory directly from Device Memory
         CUDA_CHECK(cudaMemcpyToSymbol(c_centroids, d_centroids_global, K * 3 * sizeof(float), 0, cudaMemcpyDeviceToDevice));
         
-        // Kernel 1: Assignment & Partial Reduction
+        // Kernel 1: Assignment and Partial Reduction
         kMeansAssignAndPartialReduce<<<gridSize, BLOCK_SIZE, smemSizeK1>>>(
             d_img, d_partial_sums, d_partial_counts, d_labels, numPixels, K
         );
         CUDA_CHECK(cudaGetLastError());
 
-        // Kernel 2: Final Reduction & Centroid Update
+        // Kernel 2: Final Reduction and Centroid Update
         int updateThreads = (K < 32) ? 32 : K; 
         kMeansUpdateCentroids<<<1, updateThreads>>>(
             d_partial_sums, d_partial_counts, d_centroids_global, d_diff, gridSize, K
         );
         CUDA_CHECK(cudaGetLastError());
 
-        // Check Convergence (Retrieve single float from Device)
+        // Check Convergence
         float totalMove = 0.0f;
         CUDA_CHECK(cudaMemcpy(&totalMove, d_diff, sizeof(float), cudaMemcpyDeviceToHost));
 
         if (totalMove < 1.0f) break;
     }
 
-    // Retrieve final results
+
     std::vector<int> final_labels(numPixels);
     CUDA_CHECK(cudaMemcpy(final_labels.data(), d_labels, numPixels * sizeof(int), cudaMemcpyDeviceToHost));
     
