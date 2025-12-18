@@ -22,7 +22,7 @@ g++ sequential.cc -o output -O3 -std=c++17 $(pkg-config --cflags --libs opencv4)
 ```
 * OpenMP.cc
 ```sh
-g++ KmeansParallel.cc -O3 -fopenmp -o kmeans $(pkg-config --cflags --libs opencv4)
+g++ OpenMP.cc -O3 -fopenmp -o output $(pkg-config --cflags --libs opencv4)
 ```
 * MPI.cc
 ```sh
