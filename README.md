@@ -15,6 +15,30 @@ module load cuda
 export PKG_CONFIG_PATH=$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 ```
+### Compilation
+* sequential.cc
+```sh
+g++ sequential.cc -o output -O3 -std=c++17 $(pkg-config --cflags --libs opencv4)
+```
+* OpenMP.cc
+```sh
+
+```
+* MPI.cc
+```sh
+mpicxx MPI.cc -o output -O3 -std=c++17 \
+-L$CONDA_PREFIX/lib \
+-Wl,-rpath-link,$CONDA_PREFIX/lib \
+$(pkg-config --cflags --libs opencv4)
+```
+* cuda.cu
+```sh
+
+```
+### Execution
+```sh
+./output <input_image_path> <output_image_path> <n color vectors>
+```
 ### Acknowledgements
 This project uses code from the following repository:
 - Repository: [https://github.com/Aftaab99/ImageColorQuantization](https://github.com/Aftaab99/ImageColorQuantization?tab=readme-ov-file)
