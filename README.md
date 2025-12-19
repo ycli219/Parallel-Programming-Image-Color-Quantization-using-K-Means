@@ -33,7 +33,10 @@ $(pkg-config --cflags --libs opencv4)
 ```
 * cuda.cu
 ```sh
-
+nvcc cuda.cu -o cuda \
+    -O3 -std=c++17 -arch=sm_70 \
+    -Xcompiler -D_GLIBCXX_USE_CXX11_ABI=0 \
+    $(pkg-config --cflags --libs opencv4)
 ```
 ### Execution
 ```sh
