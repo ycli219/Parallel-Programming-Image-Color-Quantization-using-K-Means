@@ -1,3 +1,4 @@
+![banner](./banner.png)
 This is our final project for NTU 2025 Parallel Programming course, focusing on accelerating K-means image color quantization using OpenMP, MPI, and CUDA.
 
 ### Environment (On NCHC)
