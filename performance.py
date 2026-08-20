@@ -6,8 +6,8 @@ categories = ['bird.png', 'rain.png', 'mountain.jpg']
 # data 結構: '方法': [bird秒數, rain秒數, mountain秒數]
 data = {
     'sequential': [0.36, 7.47, 143.08],
-    'OpenMP':     [0.1, 5.83, 62.74],
-    'MPI':        [0.74, 1.45, 18.82],
+    'OpenMP':     [0.1, 5.83, 20.08],
+    'MPI':        [0.74, 1.45, 15.63],
     'Cuda':       [0.21, 0.40, 2.21]
 }
 
